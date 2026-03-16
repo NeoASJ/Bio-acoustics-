@@ -3,7 +3,7 @@
 🎧 **Bioacoustics Audio Classification Project**
 
 <p align="center">
-  <img src="assets/frog.gif" width="500">
+  <img src="assets/frog-attack.gif" width="500">
 </p>
 
 This repository focuses on building an **audio classification model using WAV files**...
