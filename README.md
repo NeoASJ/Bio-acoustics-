@@ -1,6 +1,4 @@
-# Bioacoustics Audio Classification
-
-🎧 **Bioacoustics Audio Classification Project**
+# 🎧 Bioacoustics Audio Classification
 
 <p align="center">
   <img src="assets/frog-attack.gif" width="500">
