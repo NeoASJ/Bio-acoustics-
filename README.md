@@ -28,8 +28,8 @@ The overall workflow of the project includes:
 ```
 Bioacoustics/
 │
-├── Mahesh_dataset/
-│   └── Raw dataset provided by Mahesh
+├── Mandookavani_dataset/
+│   └── Raw dataset provided by mahesh
 │
 ├── segmentation/
 │   ├── final_data/
@@ -48,7 +48,7 @@ Bioacoustics/
 ### Raw Dataset
 
 ```
-Mahesh_dataset/
+Mandookavani_dataset/
 ```
 
 This directory contains the **original WAV recordings** provided for the project.
