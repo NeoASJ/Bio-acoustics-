@@ -1,0 +1,52 @@
+🐸 Best Sources for Western Ghats Frog Call Audio
+
+1. iNaturalist (Best free source for your exact species)
+
+Go to inaturalist.org and search each species name (e.g., Raorchestes chalazodes, Nyctibatrachus kempholeyensis)
+Filter observations to those with sound recordings
+Audio is freely downloadable under Creative Commons licenses
+Many of the exact species in your list (Raorchestes, Nyctibatrachus, Rhacophorus) have recordings from Karnataka/Kerala
+
+2. Xeno-canto (xeno-canto.org)
+
+Xeno-canto is a citizen science repository containing over 1,000,000 sound recordings from more than 12,900 species worldwide, including frogs, and all recordings are published under Creative Commons licenses. Wikipedia
+Search your species by scientific name — several Western Ghats frogs are present
+
+3. Mandookavani by Gubbi Labs (Most directly relevant)
+
+Mandookavani is the first-ever acoustic field guide to anurans in India — it presents call records of 70 species collected over 10 years across the Western Ghats, curated by researchers Ramya Badrinath, Seshadri KS, Ramit Singal, and Gururaja KV. Gubbilabs
+Your dataset appears to overlap heavily with this collection. Contact Gubbi Labs (gubbilabs.in) directly — they may share research data
+The database is available as a compact disc and was brought out by Gubbi Labs LLP, priced at Rs. 250 Conservation India
+
+4. AmphibiaWeb (amphibiaweb.org)
+
+Has 823 sound files in formats including MP3, WAV, and RM AmphibiaWeb with detailed metadata
+Search individual species pages — some Western Ghats species have calls listed
+
+5. iNatSounds Dataset (For ML research)
+
+The iNaturalist Sounds Dataset (iNatSounds) is a collection of 230,000 audio files capturing sounds from over 5,500 species, contributed by more than 27,000 recordists worldwide, encompassing sounds from birds, mammals, insects, reptiles, and amphibians. arXiv
+Available for research download
+
+
+⚠️ Honest Caveat
+For rare endemic species like Micrixalus niluvasei, Raorchestes anili, or Nyctibatrachus minimus, public audio datasets are very sparse. These species have very few recordings anywhere online. Your best options for those are:
+
+Contact researchers directly — K.V. Gururaja (Gubbi Labs), S.D. Biju (Delhi University), or SD Biju's lab often share data for research purposes
+GBIF (gbif.org) — filter by species + has sound media
+Reach out to the Bisle Frog Watch team — they have long-term Karnataka data
+
+
+Email researchers directly:
+
+K.V. Gururaja — gururaja@gubbilabs.in (Mandookavani project)
+S.D. Biju — sdbiju@gmail.com (Delhi University, Nyctibatrachus expert)
+Sonali Garg — sonali.garg@iiserpune.ac.in
+
+
+YouTube audio extraction — many researchers post call videos
+
+powershell   pip install yt-dlp
+   yt-dlp --extract-audio --audio-format mp3 "youtube_url"
+
+Data augmentation — use your existing Mandookavani MP3s (the 70 files you already have!) and augment them with pitch shifting, time stretching, and noise addition to generate more training samples
