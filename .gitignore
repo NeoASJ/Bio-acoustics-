@@ -3,4 +3,6 @@
 *.mp3
 *.pdf
 *.mp4
+*.mpga
+*.m4a
 bio_venv/
