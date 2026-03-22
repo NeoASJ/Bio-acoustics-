@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Western Ghats Frog Classification — Top 7 Species</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0f0a;
+    --surface: #111811;
+    --card: #141f14;
+    --border: #1e2e1e;
+    --green-bright: #4ade80;
+    --green-mid: #22c55e;
+    --green-dark: #166534;
+    --green-glow: rgba(74, 222, 128, 0.12);
+    --amber: #fbbf24;
+    --text-primary: #f0fdf0;
+    --text-secondary: #86efac;
+    --text-muted: #4b7a4b;
+    --font-display: 'Playfair Display', serif;
+    --font-mono: 'Space Mono', monospace;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(34,197,94,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 60% at 80% 80%, rgba(74,222,128,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 30% 30% at 50% 50%, rgba(22,101,52,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Noise texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 60px 24px 80px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .header-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green-bright);
+    background: var(--green-glow);
+    border: 1px solid rgba(74,222,128,0.2);
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 24px;
+  }
+
+  h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--text-primary);
+    margin-bottom: 16px;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--green-bright);
+  }
+
+  .header-subtitle {
+    font-size: 15px;
+    color: var(--text-muted);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    max-width: 480px;
+    margin: 0 auto 32px;
+    line-height: 1.6;
+  }
+
+  .region-badges {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 5px 14px;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    background: var(--surface);
+    letter-spacing: 0.08em;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.1s ease both;
+  }
+
+  .stat {
+    background: var(--card);
+    padding: 24px;
+    text-align: center;
+  }
+
+  .stat-number {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: var(--green-bright);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  /* Section title */
+  .section-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Frog cards */
+  .frog-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: 48px;
+  }
+
+  .frog-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.25s ease;
+    cursor: default;
+    animation: fadeUp 0.6s ease both;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .frog-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: var(--green-mid);
+    transform: scaleY(0);
+    transition: transform 0.25s ease;
+    border-radius: 0 2px 2px 0;
+  }
+
+  .frog-card:hover {
+    border-color: rgba(74,222,128,0.25);
+    background: #172017;
+    transform: translateX(4px);
+  }
+
+  .frog-card:hover::before {
+    transform: scaleY(1);
+  }
+
+  .frog-card:nth-child(1) { animation-delay: 0.15s; }
+  .frog-card:nth-child(2) { animation-delay: 0.2s; }
+  .frog-card:nth-child(3) { animation-delay: 0.25s; }
+  .frog-card:nth-child(4) { animation-delay: 0.3s; }
+  .frog-card:nth-child(5) { animation-delay: 0.35s; }
+  .frog-card:nth-child(6) { animation-delay: 0.4s; }
+  .frog-card:nth-child(7) { animation-delay: 0.45s; }
+
+  .card-number {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--green-glow);
+    border: 1px solid rgba(74,222,128,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--green-bright);
+    flex-shrink: 0;
+  }
+
+  .card-info { min-width: 0; }
+
+  .card-scientific {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 18px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .card-common {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 400;
+    margin-bottom: 8px;
+  }
+
+  .card-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-habitat {
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.15);
+    color: #86efac;
+  }
+
+  .tag-data {
+    background: rgba(251,191,36,0.08);
+    border: 1px solid rgba(251,191,36,0.15);
+    color: #fbbf24;
+  }
+
+  .card-confidence {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .confidence-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .confidence-dots {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--green-mid);
+  }
+
+  .dot.empty {
+    background: var(--border);
+  }
+
+  /* Habitat map section */
+  .info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 48px;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+
+  .info-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .info-card-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--green-bright);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .info-card-title svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .habitat-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .habitat-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: #a3c9a3;
+  }
+
+  .habitat-list li::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green-mid);
+    flex-shrink: 0;
+  }
+
+  .season-bar {
+    display: flex;
+    gap: 4px;
+    margin-top: 8px;
+  }
+
+  .month {
+    flex: 1;
+    height: 28px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: 0.05em;
+  }
+
+  .month.peak {
+    background: rgba(74,222,128,0.2);
+    border: 1px solid rgba(74,222,128,0.3);
+    color: var(--green-bright);
+  }
+
+  .month.moderate {
+    background: rgba(74,222,128,0.07);
+    border: 1px solid rgba(74,222,128,0.1);
+    color: var(--text-muted);
+  }
+
+  .month.low {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: #2d4a2d;
+  }
+
+  .season-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+  }
+
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  /* Footer note */
+  .footer-note {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px 28px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    animation: fadeUp 0.8s 0.6s ease both;
+  }
+
+  .note-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: var(--green-glow);
+    border: 1px solid rgba(74,222,128,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 16px;
+  }
+
+  .note-title {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--green-bright);
+    margin-bottom: 6px;
+  }
+
+  .note-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 640px) {
+    .stats-bar { grid-template-columns: 1fr; }
+    .info-grid { grid-template-columns: 1fr; }
+    .frog-card { grid-template-columns: 40px 1fr; }
+    .card-confidence { display: none; }
+    .card-scientific { font-size: 15px; white-space: normal; }
+  }
+
+  /* Download button */
+  .download-btn {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--green-mid);
+    color: #0a0f0a;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 14px 22px;
+    border-radius: 100px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(74,222,128,0.3), 0 8px 32px rgba(34,197,94,0.3);
+    transition: all 0.2s ease;
+    animation: fadeUp 1s 0.8s ease both;
+  }
+
+  .download-btn:hover {
+    background: var(--green-bright);
+    transform: translateY(-2px);
+    box-shadow: 0 0 0 1px rgba(74,222,128,0.5), 0 12px 40px rgba(34,197,94,0.4);
+  }
+
+  .download-btn:active {
+    transform: translateY(0px);
+  }
+
+  .download-btn svg {
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="header-tag">🐸 ML Audio Classification Project</div>
+    <h1>Western Ghats<br><em>Frog Species</em> — Final 7</h1>
+    <p class="header-subtitle">Verified species for audio dataset collection. All confirmed present in target regions with sufficient data availability.</p>
+    <div class="region-badges">
+      <span class="badge">📍 Udupi</span>
+      <span class="badge">📍 Mangalore</span>
+      <span class="badge">📍 Western Ghats</span>
+      <span class="badge">📍 Coastal Karnataka</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-number">7</div>
+      <div class="stat-label">Final Classes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">25+</div>
+      <div class="stat-label">Samples / Class</div>
+    </div>
+    <div class="stat">
+      <div class="stat-number">100%</div>
+      <div class="stat-label">Region Verified</div>
+    </div>
+  </div>
+
+  <!-- Frog List -->
+  <div class="section-title">Species List</div>
+  <div class="frog-grid">
+
+    <div class="frog-card">
+      <div class="card-number">01</div>
+      <div class="card-info">
+        <div class="card-scientific">Duttaphrynus melanostictus</div>
+        <div class="card-common">Common Indian Toad</div>
+        <div class="card-tags">
+          <span class="tag tag-habitat">Urban · Rural · Forest edge</span>
+          <span class="tag tag-data">Data: Very High</span>
+        </div>
+      </div>
+      <div class="card-confidence">
+        <div class="confidence-label">Confidence</div>
+        <div class="confidence-dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frog-card">
+      <div class="card-number">02</div>
+      <div class="card-info">
+        <div class="card-scientific">Euphlyctis cyanophlyctis</div>
+        <div class="card-common">Common Skittering Frog</div>
+        <div class="card-tags">
+          <span class="tag tag-habitat">Ponds · Wetlands · Streams</span>
+          <span class="tag tag-data">Data: Very High</span>
+        </div>
+      </div>
+      <div class="card-confidence">
+        <div class="confidence-label">Confidence</div>
+        <div class="confidence-dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frog-card">
+      <div class="card-number">03</div>
+      <div class="card-info">
+        <div class="card-scientific">Hoplobatrachus tigerinus</div>
+        <div class="card-common">Indian Bull Frog</div>
+        <div class="card-tags">
+          <span class="tag tag-habitat">Paddy fields · Lakes · Rivers</span>
+          <span class="tag tag-data">Data: Very High</span>
+        </div>
+      </div>
+      <div class="card-confidence">
+        <div class="confidence-label">Confidence</div>
+        <div class="confidence-dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frog-card">
+      <div class="card-number">04</div>
+      <div class="card-info">
+        <div class="card-scientific">Polypedates maculatus</div>
+        <div class="card-common">Common Tree Frog</div>
+        <div class="card-tags">
+          <span class="tag tag-habitat">Gardens · Forest edge · Trees</span>
+          <span class="tag tag-data">Data: High</span>
+        </div>
+      </div>
+      <div class="card-confidence">
+        <div class="confidence-label">Confidence</div>
+        <div class="confidence-dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frog-card">
+      <div class="card-number">05</div>
+      <div class="card-info">
+        <div class="card-scientific">Microhyla ornata</div>
+        <div class="card-common">Ornate Narrow-mouthed Frog</div>
+        <div class="card-tags">
+          <span class="tag tag-habitat">Leaf litter · Grasslands</span>
+          <span class="tag tag-data">Data: High</span>
+        </div>
+      </div>
+      <div class="card-confidence">
+        <div class="confidence-label">Confidence</div>
+        <div class="confidence-dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frog-card">
+      <div class="card-number">06</div>
+      <div class="card-info">
+        <div class="card-scientific">Fejervarya limnocharis</div>
+        <div class="card-common">Paddy Field Frog</div>
+        <div class="card-tags">
+          <span class="tag tag-habitat">Paddy fields · Wetlands · Coastal</span>
+          <span class="tag tag-data">Data: High</span>
+        </div>
+      </div>
+      <div class="card-confidence">
+        <div class="confidence-label">Confidence</div>
+        <div class="confidence-dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="frog-card">
+      <div class="card-number">07</div>
+      <div class="card-info">
+        <div class="card-scientific">Rhacophorus malabaricus</div>
+        <div class="card-common">Malabar Gliding Frog</div>
+        <div class="card-tags">
+          <span class="tag tag-habitat">Evergreen forest · Canopy</span>
+          <span class="tag tag-data">Data: Moderate–High</span>
+        </div>
+      </div>
+      <div class="card-confidence">
+        <div class="confidence-label">Confidence</div>
+        <div class="confidence-dots">
+          <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot empty"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Info Cards -->
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Habitats Covered
+      </div>
+      <ul class="habitat-list">
+        <li>Urban gardens &amp; roadsides</li>
+        <li>Paddy fields &amp; wetlands</li>
+        <li>Coastal streams &amp; ponds</li>
+        <li>Western Ghats forest edge</li>
+        <li>Evergreen canopy forest</li>
+        <li>Grasslands &amp; leaf litter</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        Best Recording Season
+      </div>
+      <div class="season-bar">
+        <div class="month low">J</div>
+        <div class="month low">F</div>
+        <div class="month moderate">M</div>
+        <div class="month moderate">A</div>
+        <div class="month moderate">M</div>
+        <div class="month peak">J</div>
+        <div class="month peak">J</div>
+        <div class="month peak">A</div>
+        <div class="month peak">S</div>
+        <div class="month moderate">O</div>
+        <div class="month low">N</div>
+        <div class="month low">D</div>
+      </div>
+      <div class="season-legend">
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(74,222,128,0.4)"></div> Peak</div>
+        <div class="legend-item"><div class="legend-dot" style="background:rgba(74,222,128,0.15)"></div> Moderate</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#1e2e1e"></div> Low</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer note -->
+  <div class="footer-note">
+    <div class="note-icon">🎧</div>
+    <div>
+      <div class="note-title">Dataset Sources</div>
+      <div class="note-text">Collect audio from <strong style="color:#86efac">iNaturalist</strong>, <strong style="color:#86efac">Xeno-canto</strong>, and <strong style="color:#86efac">Mandookavani</strong> (Western Ghats frog acoustic database). All 7 species have verified recordings on at least one platform. Minimum 25 samples per class is achievable. Monsoon season (June–September) is ideal for self-recording in Udupi / Mangalore region.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Floating Download Button -->
+<button class="download-btn" onclick="downloadPage()">
+  <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+    <path d="M12 3v13m0 0l-4-4m4 4l4-4M3 21h18"/>
+  </svg>
+  Download HTML
+</button>
+
+<script>
+function downloadPage() {
+  const html = document.documentElement.outerHTML;
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'western_ghats_frogs_top7.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
