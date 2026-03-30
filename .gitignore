@@ -5,3 +5,4 @@
 *.mpga
 *.m4a
 bio_venv/
+__pycache__/
