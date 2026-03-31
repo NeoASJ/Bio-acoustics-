@@ -5,9 +5,7 @@
 ![Python](https://img.shields.io/badge/Python-3.9-3776AB?style=flat-square&logo=python&logoColor=white)
 ![TensorFlow](https://img.shields.io/badge/TensorFlow-2.20-FF6F00?style=flat-square&logo=tensorflow&logoColor=white)
 ![Arduino](https://img.shields.io/badge/Arduino-Nano%2033%20BLE%20Sense-00979D?style=flat-square&logo=arduino&logoColor=white)
-![Edge Impulse](https://img.shields.io/badge/Edge%20Impulse-TinyML-6236FF?style=flat-square)
 ![uv](https://img.shields.io/badge/package%20manager-uv-DE5FE9?style=flat-square)
-![License](https://img.shields.io/badge/License-Research-lightgrey?style=flat-square)
 
 **End-to-end bioacoustic monitoring pipeline — from raw `.wav` field recordings to real-time on-device frog species classification running entirely on a microcontroller.**
 
@@ -25,7 +23,7 @@ Frogs are highly sensitive ecological indicators — their calls reveal the heal
 
 This project automates the full workflow end-to-end:
 
-1. **Training (Python)** — A CNN-based classifier is trained on the **Mandookavani dataset** of Indian frog recordings. Audio is segmented, features are extracted (MFCCs / mel-spectrograms via `librosa`), and augmented with realistic field noise using `audiomentations`. The model is built in TensorFlow/Keras and exported to TFLite.
+1. **Training (Python)** — A CNN-based classifier is trained on the **  dataset ** of Indian frog recordings. Audio is segmented, features are extracted (MFCCs / mel-spectrograms via `librosa`), and augmented with realistic field noise using `audiomentations`. The model is built in TensorFlow/Keras and exported to TFLite.
 
 2. **Deployment (Arduino)** — The quantized model is packaged via Edge Impulse into an Arduino inference library and flashed onto an **Arduino Nano 33 BLE Sense**, which classifies frog calls in real time on-device — no cloud, no internet, no external compute.
 
@@ -35,9 +33,9 @@ The result is a palm-sized, battery-powered acoustic sensor you can zip-tie to a
 
 | Challenge | Solution |
 |-----------|----------|
-| Expert-dependent manual surveys | Automated ML-based classification |
+| Expert-dependent manual surveys |  ML-based classification |
 | Cloud inference needs connectivity | TFLite on-device inference via Edge Impulse |
-| Long recordings are hard to label | Automated segmentation pipeline (`pydub`) |
+| Long recordings are hard to label |  segmentation pipeline (`pydub`) |
 | Noisy and variable field conditions | `audiomentations` augmentation during training |
 | Single-sensor failure modes | Multi-sensor fusion sketch (mic + IMU + environment) |
 | Continuous unattended monitoring | Streaming continuous inference sketch |
@@ -51,7 +49,7 @@ The result is a palm-sized, battery-powered acoustic sensor you can zip-tie to a
 ║                     TRAINING PIPELINE                                ║
 ║               Python 3.9 · TensorFlow 2.20 · uv                    ║
 ║                                                                      ║
-║   Mandookavani_dataset/   (raw .wav recordings, by species)          ║
+║    _dataset/   (raw .wav recordings, by species)          ║
 ║           │                                                          ║
 ║           ▼                                                          ║
 ║   ┌──────────────────┐                                               ║
@@ -129,15 +127,6 @@ The result is a palm-sized, battery-powered acoustic sensor you can zip-tie to a
 
 > ⚠️ **You need the Nano 33 BLE *Sense*** (not the plain Nano 33 BLE). Only the `Sense` variant carries the onboard PDM microphone.
 
-### Optional Components
-
-| Component | Required for |
-|-----------|-------------|
-| OV7675 camera module | `nano_ble33_sense_camera.ino` |
-| Micro-USB cable | All sketches (programming + serial) |
-| 3.7V LiPo battery | Untethered field deployment |
-| Weatherproof enclosure | Outdoor / long-duration use |
-
 ### Computer Requirements (Training)
 
 | | Minimum | Recommended |
@@ -186,12 +175,12 @@ Key transitive dependencies resolved by `uv.lock`: `absl-py 2.3.1`, `audioread 3
 
 ## 📊 Dataset & Preprocessing
 
-### Mandookavani Dataset
+###   Dataset
 
-Raw recordings are stored under `Mandookavani_dataset/`, organised by species subdirectory. The dataset contains `.wav` field recordings of Indian frog species, originally provided for this research project.
+Raw recordings are stored under ` _dataset/`, organised by species subdirectory. The dataset contains `.wav` field recordings of Indian frog species, originally provided for this research project.
 
 ```
-Mandookavani_dataset/
+ _dataset/
 ├── species_A/
 │   ├── rec_001.wav
 │   └── ...
@@ -360,77 +349,156 @@ python -c "import tensorflow, librosa, audiomentations, birdnetlib; print('All O
 5. Select the correct **Port**
 
 ---
+### Training
+A deep learning-based audio classification system designed to identify frog species from their calls using both:
 
-## 🎓 Training Pipeline
+- 🎯 Custom CNN (from scratch)
+- 🚀 Transfer Learning (EfficientNet-B0)
 
-All training code and notebooks live in `Training/`. Outputs (weights, plots, logs) are written to `exps/`.
-
-### Step 1 — Organise the Dataset
-
-Place raw `.wav` recordings in `Mandookavani_dataset/`, one subdirectory per species. Then run segmentation:
-
-```bash
-python Training/segment_audio.py \
-    --input_dir  Mandookavani_dataset/ \
-    --output_dir Training/final_data/ \
-    --duration   2.0 \
-    --sr         16000
-```
-
-Or work interactively:
-
-```bash
-jupyter notebook Training/notebooks/
-```
-
-### Step 2 — Extract Features
-
-```bash
-python Training/extract_features.py \
-    --data_dir    Training/final_data/ \
-    --feature     mel_spectrogram \
-    --n_mels      40 \
-    --output_dir  Training/features/
-```
-
-### Step 3 — Train
-
-```bash
-python Training/train.py \
-    --features_dir Training/features/ \
-    --epochs       50 \
-    --batch_size   32 \
-    --output_dir   exps/run_001/
-```
-
-**Outputs in `exps/run_001/`:**
-
-| File | Description |
-|------|-------------|
-| `model.h5` | Keras model weights |
-| `model.tflite` | Quantised TFLite model |
-| `labels.txt` | Integer → species name mapping |
-| `training_history.png` | Loss / accuracy curves |
-| `confusion_matrix.png` | Per-class classification breakdown |
-
-### Step 4 — Sanity-Check the Entry Point
-
-```bash
-python main.py
-# Hello from bio!
-```
-
-`main.py` is currently a minimal stub — extend it to wire your training or live-inference pipeline.
-
-### Step 5 — Package for Edge Impulse
-
-1. Sign into [Edge Impulse Studio](https://studio.edgeimpulse.com/) and create a project
-2. Upload your processed audio clips (or connect to the Nano 33 BLE Sense data forwarder)
-3. Design the **Impulse**: Audio → MFCC processing block → Neural Network classifier
-4. Train and validate in Studio
-5. **Deployment → Arduino Library → Build → Download `.zip`**
+This project demonstrates an end-to-end ML pipeline including preprocessing, training, evaluation, inference, real-time prediction, and API deployment.
 
 ---
+
+## 📌 Problem Statement
+
+Automatically classify frog species from environmental audio recordings to support:
+
+- Biodiversity monitoring  
+- Wildlife conservation  
+- Bio-acoustic research  
+
+---
+
+## 🧠 Models Overview
+
+### 🔹 Model 1: Custom CNN
+
+- Built from scratch using PyTorch  
+- Input: Mel Spectrograms / MFCC  
+- 4 Convolutional blocks + Fully Connected layers  
+- Adaptive pooling for fixed feature size  
+
+**📊 Performance**
+- Train Accuracy: **100%**
+- Validation Accuracy: **100%**
+- Test Accuracy: **97.44%**
+
+**✅ Strengths**
+- High accuracy  
+- Lightweight  
+- Fast inference  
+
+**⚠️ Limitations**
+- Slight overfitting  
+- No augmentation  
+
+---
+
+### 🔹 Model 2: Transfer Learning (EfficientNet-B0)
+
+- Pretrained on ImageNet  
+- Fine-tuned on spectrogram images  
+- Two-phase training:
+  - Phase 1: Frozen backbone  
+  - Phase 2: Full fine-tuning  
+
+**📊 Performance**
+- Test Accuracy: **70.00%**
+
+**📉 Per-class Accuracy**
+- D. melanostictus → 57.14%  
+- E. cyanophlyctis → 66.67%  
+- H. tigerinus → 100%  
+- M. ornata → 60%  
+
+**✅ Strengths**
+- Uses pretrained knowledge  
+- Includes augmentation  
+- Better training pipeline  
+
+**⚠️ Limitations**
+- Lower accuracy vs CNN  
+- Needs more data  
+
+---
+
+## ⚖️ Model Comparison
+
+| Feature | CNN Model | Transfer Learning |
+|--------|----------|------------------|
+| Approach | From scratch | Pretrained |
+| Accuracy | **97.44%** | 70.00% |
+| Data Augmentation | ❌ | ✅ |
+| Training Complexity | Low | High |
+| Generalization | Medium | Better (expected with more data) |
+| Inference Speed | Faster | Slightly slower |
+
+---
+
+## 🎧 Dataset
+
+- 4 Frog Species:
+  - Duttaphrynus melanostictus
+  - Euphlyctis cyanophlyctis
+  - Hoplobatrachus tigerinus
+  - Microhyla ornata
+
+**Audio Format**
+- `.wav`, `.mp3`, `.flac`
+
+**Preprocessing**
+- Resampled to 22050 Hz  
+- Fixed duration (3–5 sec)  
+- Converted to Mel Spectrogram  
+
+---
+
+## ⚙️ Installation
+
+```bash
+git clone <your-repo>
+cd <your-repo>
+
+python -m venv .venv
+source .venv/bin/activate   # Linux / Mac
+.venv\Scripts\activate      # Windows
+
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install librosa matplotlib seaborn scikit-learn sounddevice flask
+## 🚀 Usage
+
+### 🔹 Train CNN Model
+`python model_1_cnn.py`
+
+### 🔹 Train Transfer Learning Model
+`python model_2_transfer.py`
+
+### 🔹 Classify Single Audio File
+`python classify_audio.py --file sample.wav`
+
+### 🔹 Batch Classification
+`python classify_audio.py --folder path/to/audio_folder`
+
+### 🔹 Live Microphone Prediction
+`python classify_audio.py --live --duration 3`
+
+### 🔹 Run API Server
+`python api.py`
+
+---
+
+## 📡 API Usage
+
+**POST /classify**
+
+Send audio file:
+
+```{
+  "species": "Hoplobatrachus_tigerinus",
+  "confidence": 0.92
+}```
+```
+
 
 ## 📡 Edge Deployment
 
@@ -569,7 +637,7 @@ Predictions (DSP: X ms., Classification: X ms., Anomaly: X ms.):
 ```
 Bio-acoustics-/
 │
-├── Mandookavani_dataset/                  # Raw .wav frog call recordings (by species)
+├──  _dataset/                  # Raw .wav frog call recordings (by species)
 │
 ├── Training/                              # Python training pipeline
 │   ├── notebooks/                         # Jupyter notebooks: EDA, feature extraction,
@@ -618,7 +686,7 @@ exps/
 ```
 
 Notebooks in `Training/notebooks/` cover:
-- Waveform and spectrogram visualisation of the Mandookavani dataset
+- Waveform and spectrogram visualisation of the   dataset
 - MFCC vs. mel-spectrogram feature comparison
 - Hyperparameter sweeps (n_mels, hop_length, augmentation probabilities)
 - Edge Impulse upload, impulse design, and export walkthrough
@@ -629,7 +697,7 @@ Notebooks in `Training/notebooks/` cover:
 
 - [ ] Ship complete CLI scripts for segmentation and feature extraction
 - [ ] Add a `background` / `noise` class for out-of-distribution rejection
-- [ ] Expand Mandookavani dataset with more species and recording environments
+- [ ] Expand   dataset with more species and recording environments
 - [ ] BLE wireless logging — stream classification events to a mobile app
 - [ ] Integrate `birdnetlib` embeddings as a transfer-learning backbone
 - [ ] Power profiling and deep-sleep optimisation for multi-week battery life
@@ -640,7 +708,7 @@ Notebooks in `Training/notebooks/` cover:
 ## 🤝 Contributing
 
 Contributions are especially welcome in these areas:
-- Additional labelled frog call recordings for the Mandookavani dataset
+- Additional labelled frog call recordings for the   dataset
 - Improvements to the segmentation or augmentation pipeline
 - Lighter model architectures (e.g. MobileNet-style depthwise convolutions)
 - Field deployment case studies and accuracy reports
@@ -657,7 +725,7 @@ This project is intended for **research and experimental purposes**. Refer to in
 
 ## 🙏 Acknowledgements
 
-- **Mandookavani dataset** — Field recordings provided for this project
+- **  dataset** — Field recordings provided for this project
 - [Edge Impulse](https://edgeimpulse.com/) — TinyML toolchain, DSP blocks, and Arduino library generation
 - [librosa](https://librosa.org/) — Audio analysis and feature extraction
 - [audiomentations](https://github.com/iver56/audiomentations) — Audio data augmentation library
