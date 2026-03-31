@@ -453,7 +453,7 @@ Prediction: Hoplobatrachus_tigerinus (92.34%)
 
 ##  🌐 API Server (FLASK)
 ```bash
-python predict.py
+python flask/predict.py
 ```
 ```
 Output :
