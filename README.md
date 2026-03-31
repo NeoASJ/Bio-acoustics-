@@ -85,7 +85,7 @@ Two approaches were implemented and evaluated:
 > **Conclusion:** The custom CNN significantly outperforms transfer learning for this specific 4-species classification task with the available dataset size.
 
 ---
-
+```
 ## 🏗️ System Architecture
 ╔══════════════════════════════════════════════════════════════════════════════╗
 ║ TRAINING PIPELINE (PyTorch)                                                  ║
@@ -152,3 +152,4 @@ Two approaches were implemented and evaluated:
 ║                        Serial Monitor @ 115200 baud                          ║
 ║              Species label · Confidence score · Timing                       ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
+```
