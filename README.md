@@ -355,6 +355,7 @@ onnx2tf -i frog_classifier.onnx -o tf_saved_model
 # ✅ SavedModel exported to: tf_saved_model/
 ```
 
+## Step 3: TensorFlow to TFLite with int8 Quantization
 ```
 import tensorflow as tf
 import numpy as np
