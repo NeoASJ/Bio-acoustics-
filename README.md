@@ -87,3 +87,68 @@ Two approaches were implemented and evaluated:
 ---
 
 ## 🏗️ System Architecture
+╔══════════════════════════════════════════════════════════════════════════════╗
+║ TRAINING PIPELINE (PyTorch)                                                  ║
+║                                                                              ║
+║ _dataset/ (raw .wav recordings, by species)                                  ║
+║      │                                                                       ║
+║      ▼                                                                       ║
+║ ┌──────────────────┐                                                         ║
+║ │   Segmentation   │ pydub — split long clips into 5-sec windows             ║
+║ └────────┬─────────┘                                                         ║
+║          │                                                                   ║
+║          ▼                                                                   ║
+║ ┌──────────────────┐                                                         ║
+║ │ Feature Extract  │ librosa — Mel Spectrogram (128 bands)                  ║
+║ └────────┬─────────┘                                                         ║
+║          │                                                                   ║
+║          ▼                                                                   ║
+║ ┌──────────────────┐                                                         ║
+║ │   CNN Training   │ PyTorch Custom CNN (4 Conv Blocks + FC)                 ║
+║ └────────┬─────────┘                                                         ║
+║          │                                                                   ║
+║          ▼                                                                   ║
+║ ┌──────────────────┐                                                         ║
+║ │   Model Export   │ best_audio_classifier.pth (PyTorch weights)             ║
+║ └────────┬─────────┘                                                         ║
+╚══════════╪═══════════════════════════════════════════════════════════════════╝
+           │
+           ▼
+╔══════════════════════════════════════════════════════════════════════════════╗
+║ MODEL CONVERSION PIPELINE                                                    ║
+║                                                                              ║
+║ ┌──────────┐   ┌──────────┐   ┌──────────────┐   ┌──────────┐   ┌──────────┐ ║
+║ │ PyTorch  │──▶│   ONNX   │──▶│  TensorFlow  │──▶│  TFLite  │──▶│   Edge   │ ║
+║ │ .pth/.pt │   │   Model  │   │  SavedModel  │   │  (int8)  │   │ Impulse  │ ║
+║ └──────────┘   └──────────┘   └──────────────┘   └────┬─────┘   └────┬─────┘ ║
+║                                                       │              │       ║
+║                                               int8 quantization   Arduino    ║
+║                                                 (4x smaller)    Library.zip  ║
+╚═══════════════════════════════════════════════════════╪══════════════╪═══════╝
+                                                        │
+                                                        ▼
+╔══════════════════════════════════════════════════════════════════════════════╗
+║ EDGE DEPLOYMENT                                                              ║
+║ Arduino Nano 33 BLE Sense · nRF52840                                         ║
+║                                                                              ║
+║ ┌──────────────────────────────────────────────────────────────────────────┐ ║
+║ │ nano_ble33_sense_microphone.ino                                          │ ║
+║ │ Single audio window → DSP features → inference → Serial                  │ ║
+║ └──────────────────────────────────────────────────────────────────────────┘ ║
+║ ┌──────────────────────────────────────────────────────────────────────────┐ ║
+║ │ nano_ble33_sense_microphone_continuous.ino                               │ ║
+║ │ Continuous PDM stream → sliding window → rolling inference                │ ║
+║ └──────────────────────────────────────────────────────────────────────────┘ ║
+║ ┌──────────────────────────────────────────────────────────────────────────┐ ║
+║ │ nano_ble33_sense_camera.ino                                              │ ║
+║ │ OV7675 image frame → visual species identification                       │ ║
+║ └──────────────────────────────────────────────────────────────────────────┘ ║
+║ ┌──────────────────────────────────────────────────────────────────────────┐ ║
+║ │ nano_ble33_sense_fusion.ino                                              │ ║
+║ │ Mic + IMU + temp/humidity → fused multi-sensor inference                 │ ║
+║ └──────────────────────────────────────────────────────────────────────────┘ ║
+║                                      │                                       ║
+║                                      ▼                                       ║
+║                        Serial Monitor @ 115200 baud                          ║
+║              Species label · Confidence score · Timing                       ║
+╚══════════════════════════════════════════════════════════════════════════════╝
