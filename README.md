@@ -405,13 +405,13 @@ print(f"📦 Model size: {size_mb:.2f} MB")
 
 ---
 
-### 📦 Size Reduction
+## 📦 Size Reduction
 
 **FP32 (~10 MB) → int8 (~2.5 MB) = ~4× smaller**
 
 ## 🚀 Running Inference
 
-### 🔹 1. Single Audio File
+## 🔹 1. Single Audio File
 ```bash
 python classify_audio.py --file path/to/audio.wav
 ```
@@ -420,7 +420,7 @@ Predicted frog species
 Confidence score
 Class probability distribution
 
-### 🔹 2. Batch Processing (Folder)
+##🔹 2. Batch Processing (Folder)
 ```
 python classify_audio.py --folder path/to/audio_folder/
 ```
@@ -428,7 +428,7 @@ python classify_audio.py --folder path/to/audio_folder/
 Predictions for all files
 Summary of species distribution
 
-###🔹 3. Live Microphone Inference
+##🔹 3. Live Microphone Inference
 ```
 python classify_audio.py --live --duration 3
 ```
@@ -436,7 +436,7 @@ Records audio from microphone
 Classifies every 3 seconds
 Displays prediction + probability bars
 
-###🔹 4. Real-Time Streaming Demo
+##🔹 4. Real-Time Streaming Demo
 ```
 python realtime_demo.py
 ```
