@@ -12,6 +12,8 @@ The goal is to detect and classify acoustic patterns—such as **frog calls and 
 
 By combining **audio signal processing**, **machine learning**, and **embedded deployment**, the system aims to enable **real-time acoustic monitoring** for ecological and environmental applications.
 
+This project not only trains an audio classification model but also deploys it as a **fully functional embedded AI system capable of real-time bioacoustic inference on microcontroller hardware**.
+
 The overall workflow of the project includes:
 
 * 🎧 **Audio Data Collection** – Raw WAV recordings of environmental sounds
@@ -148,6 +150,70 @@ Possible deployment platforms include:
 * Custom acoustic sensor hardware
 
 ---
+
+# 🧩 Hardware Implementation
+
+The system is deployed on a microcontroller to perform **real-time acoustic inference directly on-device**, without requiring internet connectivity.
+
+## 🔌 Hardware Used
+
+- Arduino Nano 33 BLE Sense  
+  - Built-in PDM microphone  
+  - ARM Cortex-M processor  
+  - Optimized for TinyML and edge AI applications  
+
+---
+
+## ⚙️ Firmware Overview
+
+The trained model is converted into an **Arduino-compatible inference library** and flashed onto the microcontroller.
+
+The firmware performs:
+
+1. 🎤 Audio capture using onboard microphone  
+2. 🧠 Buffering of real-time audio samples  
+3. 🤖 Running inference using embedded ML model  
+4. 📊 Outputting confidence scores for each species  
+
+---
+
+### 📟 Example Output
+
+```text
+Predictions:
+Frog_A: 0.12
+Frog_B: 0.87  <-- highest confidence
+Frog_C: 0.01
+```
+
+---
+
+## 🔁 Real-Time Inference Flow
+```
+Microphone Input
+│
+▼
+PDM Audio Buffer
+│
+▼
+Feature Extraction (DSP)
+│
+▼
+Embedded Model (TFLite)
+│
+▼
+Confidence Scores Output
+```
+---
+# 💻 Embedded Code Highlights
+
+The embedded firmware is built using Edge AI inference libraries and Arduino framework.
+
+## 🔑 Key Functionalities
+
+### 🎤 Audio Sampling
+```cpp
+PDM.begin(1, EI_CLASSIFIER_FREQUENCY);
 
 # Getting Started
 
