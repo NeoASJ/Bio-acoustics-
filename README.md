@@ -13,7 +13,6 @@
 
 ![Frog classification demo](assets/frog-attack.gif)
 
-[Overview](#-project-overview) · [Architecture](#-system-architecture) ·  [Hardware](#-hardware-requirements) · [Setup](#-installation--setup) · [Training](#-training-pipeline) · [Conversion](#-pytorch-to-tflite-conversion) · [Deployment](#-edge-deployment) · [Structure](#-project-structure)
 
 </div>
 
