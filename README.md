@@ -241,7 +241,7 @@ dataset/
 
 The raw audio is transformed into a **log-scale Mel Spectrogram** to be used as a 2D image-like input for the Convolutional Neural Network.
 
-
+```
 Audio clip (22.05 kHz · mono · .wav)
         │
         ▼
@@ -256,7 +256,7 @@ Mel Spectrogram (librosa)
         │
         ▼
 CNN Input (1 × 128 × 216)
-
+```
 ---
 ## 🔊 Data Augmentation (audiomentations)
 
