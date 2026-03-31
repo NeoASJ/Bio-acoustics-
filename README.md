@@ -1,9 +1,3 @@
-# 🎧 Bioacoustics Audio Classification
-
-<p align="center">
-  <img src="assets/frog-attack.gif" width="500">
-</p>
-
 # 🐸 Bioacoustics Audio Classification
 
 <div align="center">
