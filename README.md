@@ -37,7 +37,7 @@ The result is a palm-sized, battery-powered acoustic sensor you can zip-tie to a
 
 | Challenge | Solution |
 |-----------|----------|
-| Expert-dependent manual surveys | ML-based classification |
+| Expert-dependent manual surveys | Deep Learning based classification |
 | Cloud inference needs connectivity | TFLite on-device inference via Edge Impulse |
 | PyTorch models can't run on MCUs | PyTorch → ONNX → TF → TFLite conversion pipeline |
 | Long recordings are hard to label | Segmentation pipeline (`pydub`) |
