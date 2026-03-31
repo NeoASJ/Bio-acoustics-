@@ -160,6 +160,7 @@ Two approaches were implemented and evaluated:
 
 ### Arduino Nano 33 BLE Sense *(required)*
 
+
 | Component | Specification |
 |-----------|---------------|
 | MCU | Nordic nRF52840 — ARM Cortex-M4F @ 64 MHz |
