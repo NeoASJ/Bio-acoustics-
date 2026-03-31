@@ -447,8 +447,7 @@ Processes audio in chunks (3 seconds)
 Prints predictions in real-time
 
 Example output:
-
-Listening for frog calls...
+Listening to frog calls...
 ==================================================
 Prediction: Hoplobatrachus_tigerinus (92.34%)
 
