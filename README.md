@@ -159,7 +159,7 @@ Two approaches were implemented and evaluated:
 ## 🔧 Hardware Requirements
 
 ### Arduino Nano 33 BLE Sense *(required)*
-
+![HArdware_device](assets/device.gif)
 
 | Component | Specification |
 |-----------|---------------|
