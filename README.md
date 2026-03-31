@@ -282,21 +282,18 @@ Input: 2-D feature map (Mel Spectrogram or MFCC)
 ### Export Path to Edge Hardware
 
 ```
-Keras model (.h5)
-     │
-     ▼  tf.lite.TFLiteConverter
-TFLite model (.tflite)  [float32]
-     │
-     ▼  Post-training int8 quantisation
-Quantised model (~3–5× smaller, Nano 33 BLE Sense-compatible)
-     │
-     ▼  Edge Impulse Studio — Deploy → Arduino Library
-Arduino .zip inference library
-     │
-     ▼  Arduino IDE — Sketch → Include Library → Add .ZIP
-Flashed to Nano 33 BLE Sense via one of four .ino sketches
-```
+## 🔄 Deployment Flow
 
+**PyTorch (.pth / .pt)**  
+⬇  
+**ONNX / TorchScript**  
+⬇  
+**TensorFlow**  
+⬇  
+**TFLite (.tflite)**  
+⬇  
+**Edge Deployment (Mobile / Embedded Devices)**
+```
 ---
 
 ## 🛠️ Installation & Setup
@@ -381,8 +378,8 @@ Automatically classify frog species from environmental audio recordings to suppo
 - Adaptive pooling for fixed feature size  
 
 **📊 Performance**
-- Train Accuracy: **100%**
-- Validation Accuracy: **100%**
+- Train Accuracy: **97%**
+- Validation Accuracy: **97%**
 - Test Accuracy: **97.44%**
 
 **✅ Strengths**
@@ -598,41 +595,6 @@ Upload:
 | LSM9DS1 IMU | Accelerometer + gyroscope | Physical disturbance near device |
 | HTS221 | Temperature + humidity | Environmental context (frogs call more in warm, humid conditions) |
 
-**Use when:** Reducing false positives in noisy environments; research requiring correlated multi-modal sensor data; advanced deployments where environmental context matters.
-
-```
-Upload:
-  Open edge-device/nano_ble33_sense/nano_ble33_sense_fusion/
-       nano_ble33_sense_fusion.ino
-  → Upload → Serial Monitor (115200 baud)
-```
-
----
-
-### Reading the Serial Output (All Sketches)
-
-```
-Predictions (DSP: X ms., Classification: X ms., Anomaly: X ms.):
-  <species_label>: <confidence>
-  ...
-```
-
-| Field | Meaning |
-|-------|---------|
-| `DSP` | On-device feature extraction time (ms) |
-| `Classification` | Neural network forward-pass time (ms) |
-| `Anomaly` | Anomaly score — high = sound not matching any trained class |
-| `confidence` | 0.0–1.0; highest value = predicted species |
-
-**Confidence thresholds (suggested):**
-
-| Confidence | Interpretation |
-|-----------|---------------|
-| > 0.80 | Strong detection — log the event |
-| 0.50 – 0.80 | Uncertain — cross-check with time of day / humidity |
-| < 0.50 | Likely background noise or unknown sound |
-
----
 
 ## 📁 Project Structure
 
@@ -642,9 +604,10 @@ Bio-acoustics-/
 ├──  _dataset/                  # Raw .wav frog call recordings (by species)
 │
 ├── Training/                              # Python training pipeline
-│   ├── notebooks/                         # Jupyter notebooks: EDA, feature extraction,
-│   │                                      #   model development, Edge Impulse workflow
-│   └── final_data/                        # Cleaned, segmented clips (post-preprocessing)
+│   ├── cnn-ref                            # Cnn built for the reference with 5 Classes
+│   │__ model-1-cnn                        # Trained on the npy files 
+│   |
+|   |__ model-2-transfer                   # Trained using transfer learning on image model 
 │
 ├── edge-device/
 │   └── nano_ble33_sense/                  # Arduino inference sketches
@@ -662,7 +625,7 @@ Bio-acoustics-/
 ├── assets/                                # Media: GIFs and images used in this README
 │   └── frog-attack.gif
 │
-├── main.py                                # Entry point stub ("Hello from bio!")
+├── main.py                                # Entry point stub 
 ├── pyproject.toml                         # Project metadata + direct dependencies
 ├── uv.lock                                # Full locked dependency tree (2 698 lines)
 ├── .python-version                        # Pinned: 3.9
@@ -678,20 +641,6 @@ Bio-acoustics-/
 Each training run writes its own subdirectory under `exps/`:
 
 ```
-exps/
-└── run_001/
-    ├── model.h5                  # Keras weights
-    ├── model.tflite              # Quantised TFLite model
-    ├── labels.txt                # Class index → species name
-    ├── training_history.png      # Loss / accuracy over epochs
-    └── confusion_matrix.png      # Per-class accuracy breakdown
-```
-
-Notebooks in `Training/notebooks/` cover:
-- Waveform and spectrogram visualisation of the   dataset
-- MFCC vs. mel-spectrogram feature comparison
-- Hyperparameter sweeps (n_mels, hop_length, augmentation probabilities)
-- Edge Impulse upload, impulse design, and export walkthrough
 
 ---
 
@@ -728,7 +677,6 @@ This project is intended for **research and experimental purposes**. Refer to in
 ## 🙏 Acknowledgements
 
 - **  dataset** — Field recordings provided for this project
-- [Edge Impulse](https://edgeimpulse.com/) — TinyML toolchain, DSP blocks, and Arduino library generation
 - [librosa](https://librosa.org/) — Audio analysis and feature extraction
 - [audiomentations](https://github.com/iver56/audiomentations) — Audio data augmentation library
 - [birdnetlib](https://github.com/joeweiss/birdnetlib) — Bioacoustic analysis and BirdNET backbone
