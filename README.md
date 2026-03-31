@@ -454,4 +454,14 @@ Prediction: Hoplobatrachus_tigerinus (92.34%)
 
 ##  🌐 API Server (FLASK)
 ```bash
-python api.py
+python predict.py
+```
+```
+Output :
+{
+  "species": "Hoplobatrachus_tigerinus",
+  "confidence": 0.92
+}
+```
+
+
