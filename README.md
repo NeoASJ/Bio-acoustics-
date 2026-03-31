@@ -463,4 +463,43 @@ Output :
 }
 ```
 
+## 📁 Project Structure
 
+```
+Bio-acoustics/
+│
+├── assets/
+│
+├── edge-device/
+│   └── nano_ble33_sense/
+│       ├── nano_ble33_sense_camera/
+│       ├── nano_ble33_sense_fusion/
+│       ├── nano_ble33_sense_microphone/
+│       └── nano_ble33_sense_microphone_continuous/
+│
+├── exps/         
+│
+├── Training/
+│   ├── cnn-ref/
+│   │   ├── model/
+│   │   └── train.py
+│   │
+│   ├── model-1-cnn/
+│   │   ├── arch.txt
+│   │   ├── best_audio_classifier.pth
+│   │   └── model_1_cnn.py
+│   │
+│   └── model-2-transfer-learning/
+│       ├── inference/
+│       ├── model_outputs/
+│       └── train/
+│
+├── .gitattributes
+├── .gitignore
+├── .python-version
+├── main.py
+├── pyproject.toml
+├── README.md
+├── uv.lock
+└── .gitignore
+```
