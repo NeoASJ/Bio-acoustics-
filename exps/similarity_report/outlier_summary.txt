@@ -1,0 +1,51 @@
+SPECTROGRAM SIMILARITY REPORT
+============================================================
+
+
+Duttaphrynus_melanostictus:
+  z=3.13  aug_0000_11_925665.wav
+  z=3.13  11_925665.wav
+  z=3.13  duttaphrynus_melanostictus_925665.wav
+  z=3.04  7_928658.wav
+  z=3.03  aug_0004_7_928658.wav
+  z=2.76  6_928661.wav
+  z=2.68  aug_0003_6_928661.wav
+  z=1.98  Duttaphrynus_melanostictus_7.wav
+  z=1.72  Duttaphrynus_melanostictus_79.wav
+  z=1.67  gbif_4924051694.wav
+
+Euphlyctis_cyanophlyctis:
+  z=3.05  aug_0009_Euphlyctis_cyanophlyctis_7.wav
+  z=3.02  Euphlyctis_cyanophlyctis_3.wav
+  z=2.91  aug_0012_gbif_3090825973.wav
+  z=2.15  aug_0016_gbif_5155425385.wav
+  z=1.84  aug_0001_3_980918.wav
+  z=1.75  aug_0029_Euphlyctis_cyanophlyctis_2.wav
+
+Hoplobatrachus_tigerinus:
+  z=3.87  Hoplobatrachus_tigerinus_19.wav
+  z=2.93  aug_0008_gbif_5995311309.wav
+  z=2.70  aug_0053_gbif_5995311309.wav
+  z=2.68  aug_0041_XC1040393 - Indus Valley Bullfrog - Hoplobatrachus tigerinus.wav
+  z=2.59  gbif_5995311309.wav
+  z=2.59  XC1040393 - Indus Valley Bullfrog - Hoplobatrachus tigerinus.wav
+  z=1.98  aug_0040_hoplobatrachus_tigerinus_980950.wav
+  z=1.75  aug_0013_Hoplobatrachus_tigerinus_11.wav
+
+Microhyla_ornata:
+  z=3.11  aug_0013_Microhyla_ornata_5.wav
+  z=2.31  aug_0026_6_973811.wav
+  z=2.29  aug_0037_Microhyla_ornata_5.wav
+  z=1.92  aug_0036_Microhyla_ornata_4.wav
+  z=1.80  aug_0061_Microhyla_ornata_5.wav
+  z=1.76  aug_0059_Microhyla_ornata_3.wav
+  z=1.64  aug_0012_Microhyla_ornata_4.wav
+  z=1.57  aug_0005_gbif_5155425736.wav
+
+Polypedates_maculatus:
+  z=3.68  aug_0043_Polypedates_maculatus_0.wav
+  z=3.65  aug_0023_Polypedates_maculatus_0.wav
+  z=3.65  Polypedates_maculatus_0.wav
+  z=3.65  aug_0003_Polypedates_maculatus_0.wav
+  z=2.84  aug_0051_Polypedates_maculatus_3.wav
+  z=1.88  aug_0009_Polypedates_maculatus_14.wav
