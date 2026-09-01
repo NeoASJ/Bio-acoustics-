@@ -465,6 +465,25 @@ Output :
 }
 ```
 
+Hardware output
+```bash
+Starting inferencing in 2 seconds...
+
+Recording...
+
+Recording done
+
+Predictions (DSP: 238 ms., Classification: 19 ms., Anomaly: 0 ms.):
+
+Duttaphrynus_melanostictus: 0.00000
+
+Haplobatrachus_tigerinus: 0.99609
+
+Microhyla_ornata: 0.00000
+
+Polypedates_maculatus: 0.00000
+```
+
 ## 📁 Project Structure
 
 ```
